@@ -25,20 +25,20 @@ def register_screen():
     win.title('Register')
     win.config(bg='light blue')
 
-    #variables
-    global username
+    # variables
+    global email
     global password
 
-    username = StringVar()
+    email = StringVar()
     password = StringVar()
 
-    global username_entry
+    global email_entry
     global password_entry
     # username
     Label(win, text="Email*", font=f, bg='light blue', width=20, height=2).pack()
 
-    username_entry = Entry(win, font=f, textvariable=username)
-    username_entry.pack()
+    email_entry = Entry(win, font=f, textvariable=email)
+    email_entry.pack()
 
     # password
     Label(win, text='Password*', font=f, bg='light blue', width=20, height=2).pack()
@@ -48,24 +48,29 @@ def register_screen():
     Label(win, text='', bg='light blue').pack()
 
 
-    def registration_success():
-        global username_entry
-        global password_entry
-        username_info = username.get()
-        password_info = password.get()
 
+    def registration_success():
+        global email_entry
+        global password_entry
+        if len(email_entry.get()) == 0:     #or you can use >  if not email_entry.get():
+            label = Label(win, text='error', fg='red').pack()
+        elif len(password_entry.get()) == 0:
+            label = Label(win, text='error', fg='red').pack()
+        else:
+           label = Label(win, text='Registration success!', fg='green', font=f).pack()
+
+
+        username_info = email.get()
+        password_info = password.get()
         accounts = {'Username': f'{username_info}', 'Password': f'{password_info}'}
         file2 = open('user.txt', 'a')
         file2.write(json.dumps(accounts) + '\n')
-        file2.close()
-
-        Label(win, text='Registration Success', fg='green', font=f).pack()
-
-        username_entry.delete(0,END)
-        password_entry.delete(0,END)
 
 
 
+
+        email_entry.delete(0, END)
+        password_entry.delete(0, END)
 
     # Login Button
     Button(win, text='Register', font=f, width=15, height=1, command=registration_success).pack()
@@ -80,27 +85,30 @@ def login_screen():
     win2.title('Register')
     win2.config(bg='light blue')
 
-    username = StringVar()
+    email = StringVar()
     password = StringVar()
 
     Label(win2, text='E-mail*', font=f, bg='light blue', width=20, height=2).pack()
 
-    username_entry = Entry(win2, font=f,textvariable=username)
-    username_entry.pack()
+    email_entry = Entry(win2, font=f, textvariable=email)
+    email_entry.pack()
 
-    Label(win2, text='Password*', bg='light blue',font=f, width=20, height=2).pack()
+    Label(win2, text='Password*', bg='light blue', font=f, width=20, height=2).pack()
 
-    password_entry = Entry(win2,font=f, textvariable=password)
+    password_entry = Entry(win2, font=f, textvariable=password, show='*')
     password_entry.pack()
     Label(win2, bg='light blue', text='').pack()
 
     def login_sucess():
         Label(win2, text='Login success!', fg='green', font=f).pack()
-        username_entry.delete(0,END)
-        password_entry.delete(0,END)
+
+        email_entry.delete(0, END)
+        password_entry.delete(0, END)
+
 
     Button(win2, text='Login', width=15, height=1, font=f, command=login_sucess).pack()
     return win2.mainloop()
+
 
 # Login button
 
@@ -111,12 +119,3 @@ Label(text='', bg='light blue').pack()  # label to add a blanck space between th
 
 Button(text='Register', font=f, width=20, height=1, command=register_screen).pack()
 ws.mainloop()
-
-
-
-
-
-
-
-
-
