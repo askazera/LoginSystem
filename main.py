@@ -1,6 +1,7 @@
 from tkinter import *
 import json
 
+
 f = ('Times', 14)
 
 # first screen
@@ -50,21 +51,24 @@ def register_screen():
 
 
     def registration_success():
-        global email_entry
+        global email_entry, label
         global password_entry
-        if len(email_entry.get()) == 0:     #or you can use >  if not email_entry.get():
-            label = Label(win, text='error', fg='red').pack()
-        elif len(password_entry.get()) == 0:
-            label = Label(win, text='error', fg='red').pack()
-        else:
-           label = Label(win, text='Registration success!', fg='green', font=f).pack()
 
 
-        username_info = email.get()
-        password_info = password.get()
-        accounts = {'Username': f'{username_info}', 'Password': f'{password_info}'}
-        file2 = open('user.txt', 'a')
-        file2.write(json.dumps(accounts) + '\n')
+
+        if email_entry.get() and password_entry.get():
+            label = Label(win, text='Registration success!', fg='green', font=f)
+            label.pack()
+            username_info = email.get()
+            password_info = password.get()
+            accounts = {'Username': f'{username_info}', 'Password': f'{password_info}'}
+            file2 = open('user.txt', 'a')
+            file2.write(json.dumps(accounts) + '\n')
+
+
+        if len(email_entry.get()) == 0 or len(password_entry.get()) == 0:  # or you can use >  if not email_entry.get():
+            label = Label(win, text='error', fg='red')
+            label.pack()
 
 
 
@@ -72,8 +76,13 @@ def register_screen():
         email_entry.delete(0, END)
         password_entry.delete(0, END)
 
+        win.after(1000, label.destroy)
+
+
     # Login Button
+
     Button(win, text='Register', font=f, width=15, height=1, command=registration_success).pack()
+
     return win.mainloop()
 
 
@@ -99,12 +108,24 @@ def login_screen():
     password_entry.pack()
     Label(win2, bg='light blue', text='').pack()
 
+
     def login_sucess():
-        Label(win2, text='Login success!', fg='green', font=f).pack()
+        global label
+
+
+        if email_entry.get() and password_entry.get():
+            label = Label(win2, text='Login success!', fg='green', font=f)
+            label.pack()
+        if len(email_entry.get()) == 0 or len(password_entry.get()) == 0:
+            label = Label(win2, text='error', fg='red')
+            label.pack()
+
+
 
         email_entry.delete(0, END)
         password_entry.delete(0, END)
 
+        win2.after(1000, label.destroy)
 
     Button(win2, text='Login', width=15, height=1, font=f, command=login_sucess).pack()
     return win2.mainloop()
